@@ -62,6 +62,26 @@ const ground = {
     }
 }
 
+// ------------ start screen ------------
+
+const msgReady = {
+    spriteX: 134,
+    spriteY: 0,
+    width: 174,
+    height: 152,
+    positionX: (canvas.width / 2) - 174 / 2,
+    positionY: 50,
+    draw() {
+        context.drawImage(
+            sprites,
+            msgReady.spriteX, msgReady.spriteY,
+            msgReady.width, msgReady.height,
+            msgReady.positionX, msgReady.positionY,
+            msgReady.width, msgReady.height
+        )
+    }
+}
+
 // ------------ the bird ------------
 
 const flappyBird = {
@@ -89,14 +109,56 @@ const flappyBird = {
     }
 }
 
-function loop() {
-    flappyBird.refresh()
+// ------------ screens ------------
 
-    background.draw()
-    ground.draw()
-    flappyBird.draw()
+let activeScreen = {}
+
+function changeScreen(newScreen) {
+    activeScreen = newScreen
+}
+
+const screens = {
+    start: {
+        draw() {
+            background.draw()
+            ground.draw()
+            flappyBird.draw()
+            msgReady.draw()
+
+        },
+        click() {
+            changeScreen(screens.game)
+        },
+        refresh() {
+
+        }
+    }
+}
+
+screens.game = {
+    draw() {
+        background.draw()
+        ground.draw()
+        flappyBird.draw()
+    },
+    refresh() {
+        flappyBird.refresh()
+
+    }
+}
+
+function loop() {
+    activeScreen.draw()
+    activeScreen.refresh()
     
     requestAnimationFrame(loop)
 }
 
+window.addEventListener('click', function() {
+    if(activeScreen.click) {
+        activeScreen.click()
+    }
+})
+
+changeScreen(screens.start)
 loop()
