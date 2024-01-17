@@ -4,7 +4,37 @@ sprites.src = '../assets/img/sprites.png'
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
-// ground
+// ------------ background ------------
+
+const background = {
+    spriteX: 390, 
+    spriteY: 0,
+    width: 275,
+    height: 204,
+    positionX: 0,
+    positionY: canvas.height - 204,
+    draw() {
+        context.fillStyle = '#70c5ce'
+        context.fillRect(0,0, canvas.width, canvas.height)
+
+        context.drawImage(
+            sprites,
+            background.spriteX, background.spriteY,
+            background.width, background.height,
+            background.positionX, background.positionY,
+            background.width, background.height
+        ) 
+        context.drawImage(
+            sprites,
+            background.spriteX, background.spriteY,
+            background.width, background.height,
+            (background.positionX + background.width), background.positionY,
+            background.width, background.height
+        ) 
+    }
+}
+
+// ------------ ground ------------
 
 const ground = {
     spriteX: 0,
@@ -32,6 +62,8 @@ const ground = {
     }
 }
 
+// ------------ the bird ------------
+
 const flappyBird = {
     spriteX: 0,
     spriteY: 0,
@@ -52,6 +84,7 @@ const flappyBird = {
 }
 
 function loop() {
+    background.draw()
     ground.draw()
     flappyBird.draw()
     
