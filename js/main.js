@@ -93,6 +93,11 @@ const flappyBird = {
     positionY: 50,
     gravity: 0.25,
     speed: 0,
+    jumpHeight: 4.6,
+    jump() {
+        flappyBird.speed = - flappyBird.jumpHeight
+    },
+
     refresh() {
         flappyBird.speed = flappyBird.speed + flappyBird.gravity
         flappyBird.positionY = flappyBird.positionY + flappyBird.speed
@@ -140,6 +145,9 @@ screens.game = {
         background.draw()
         ground.draw()
         flappyBird.draw()
+    },
+    click() {
+        flappyBird.jump()
     },
     refresh() {
         flappyBird.refresh()
