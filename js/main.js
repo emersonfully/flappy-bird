@@ -34,6 +34,19 @@ const background = {
     }
 }
 
+// ------------ collision ------------
+
+function collision(flappyBird, ground) {
+    const flappyBirdY = flappyBird.positionY + flappyBird.height
+    const groundY = ground.positionY 
+
+    if(flappyBirdY >= groundY) {
+        return true
+    }
+
+    return false
+}
+
 // ------------ ground ------------
 
 const ground = {
@@ -84,50 +97,70 @@ const msgReady = {
 
 // ------------ the bird ------------
 
-const flappyBird = {
-    spriteX: 0,
-    spriteY: 0,
-    width: 33,
-    height: 24,
-    positionX: 10,
-    positionY: 50,
-    gravity: 0.25,
-    speed: 0,
-    jumpHeight: 4.6,
-    jump() {
-        flappyBird.speed = - flappyBird.jumpHeight
-    },
+function createFlappyBird() {
 
-    refresh() {
-        flappyBird.speed = flappyBird.speed + flappyBird.gravity
-        flappyBird.positionY = flappyBird.positionY + flappyBird.speed
-    },
-    draw() {
-        context.drawImage(
-        sprites, // the psrite image
-        flappyBird.spriteX, flappyBird.spriteY, // Sprite x, Sprite y
-        flappyBird.width, flappyBird.height, // sprite size
-        flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
-        flappyBird.width, flappyBird.height // sprite size inside canvas
-        )
-
+    const flappyBird = {
+        spriteX: 0,
+        spriteY: 0,
+        width: 33,
+        height: 24,
+        positionX: 10,
+        positionY: 50,
+        gravity: 0.25,
+        speed: 0,
+        jumpHeight: 4.6,
+        jump() {
+            flappyBird.speed = - flappyBird.jumpHeight
+        },
+    
+        refresh() {
+            if(collision(flappyBird, ground)) {
+                console.log('collided')
+    
+                changeScreen(screens.start)
+                return
+            }
+            flappyBird.speed = flappyBird.speed + flappyBird.gravity
+            flappyBird.positionY = flappyBird.positionY + flappyBird.speed
+        },
+        draw() {
+            context.drawImage(
+            sprites, // the psrite image
+            flappyBird.spriteX, flappyBird.spriteY, // Sprite x, Sprite y
+            flappyBird.width, flappyBird.height, // sprite size
+            flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
+            flappyBird.width, flappyBird.height // sprite size inside canvas
+            )
+    
+        }
     }
+
+    return flappyBird
 }
+
 
 // ------------ screens ------------
 
+const globals = {}
 let activeScreen = {}
 
 function changeScreen(newScreen) {
     activeScreen = newScreen
+
+    if(activeScreen.initialize) {
+        activeScreen.initialize()
+    }
 }
 
 const screens = {
     start: {
+        initialize() {
+            globals.flappyBird = createFlappyBird()
+        },
         draw() {
             background.draw()
             ground.draw()
-            flappyBird.draw()
+            globals.flappyBird.draw()
             msgReady.draw()
 
         },
@@ -144,13 +177,13 @@ screens.game = {
     draw() {
         background.draw()
         ground.draw()
-        flappyBird.draw()
+        globals.flappyBird.draw()
     },
     click() {
-        flappyBird.jump()
+        globals.flappyBird.jump()
     },
     refresh() {
-        flappyBird.refresh()
+        globals.flappyBird.refresh()
 
     }
 }
