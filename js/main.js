@@ -4,6 +4,34 @@ sprites.src = '../assets/img/sprites.png'
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
+// ground
+
+const ground = {
+    spriteX: 0,
+    spriteY: 610,
+    width: 224,
+    height: 112,
+    positionX: 0,
+    positionY: canvas.height - 112,
+    draw() {
+        context.drawImage(
+            sprites,
+            ground.spriteX, ground.spriteY,
+            ground.width, ground.height,
+            ground.positionX, ground.positionY,
+            ground.width, ground.height
+        )
+
+        context.drawImage(
+            sprites,
+            ground.spriteX, ground.spriteY,
+            ground.width, ground.height,
+            (ground.positionX + ground.width), ground.positionY,
+            ground.width, ground.height
+        )
+    }
+}
+
 const flappyBird = {
     spriteX: 0,
     spriteY: 0,
@@ -24,6 +52,7 @@ const flappyBird = {
 }
 
 function loop() {
+    ground.draw()
     flappyBird.draw()
     
     requestAnimationFrame(loop)
