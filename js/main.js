@@ -3,6 +3,7 @@ sprites.src = '../assets/img/sprites.png'
 const hitSound = new Audio()
 hitSound.src = '../assets/sounds/hit.wav'
 
+let frames = 0
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
@@ -125,7 +126,25 @@ function createFlappyBird() {
         jump() {
             flappyBird.speed = - flappyBird.jumpHeight
         },
-        
+        moves: [
+            {spriteX: 0, spriteY: 0,},
+            {spriteX: 0, spriteY: 26,},
+            {spriteX: 0, spriteY: 52,},
+            {spriteX: 0, spriteY: 26,},
+        ],
+        actualFrame: 0,
+        actualFrameRefresh() {
+            const frameInterval = 10
+            const beyondInterval = frames % frameInterval === 0
+            if(beyondInterval) {
+
+                const incrementBase = 1
+                const increment = incrementBase + flappyBird.actualFrame
+                const repeatBase = flappyBird.moves.length
+                
+                flappyBird.actualFrame = increment % repeatBase
+            }
+        },
         refresh() {
             if(collision(flappyBird, globals.ground)) {
                 console.log('collided')
@@ -140,12 +159,14 @@ function createFlappyBird() {
             flappyBird.positionY = flappyBird.positionY + flappyBird.speed
         },
         draw() {
+            flappyBird.actualFrameRefresh()
+            const {spriteX, spriteY} = flappyBird.moves[flappyBird.actualFrame]
             context.drawImage(
-            sprites, // the psrite image
-            flappyBird.spriteX, flappyBird.spriteY, // Sprite x, Sprite y
-            flappyBird.width, flappyBird.height, // sprite size
-            flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
-            flappyBird.width, flappyBird.height // sprite size inside canvas
+                sprites, // the psrite image
+                spriteX, spriteY, // Sprite x, Sprite y
+                flappyBird.width, flappyBird.height, // sprite size
+                flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
+                flappyBird.width, flappyBird.height // sprite size inside canvas
             )
     
         }
@@ -208,7 +229,8 @@ screens.game = {
 function loop() {
     activeScreen.draw()
     activeScreen.refresh()
-    
+    frames = frames + 1
+
     requestAnimationFrame(loop)
 }
 
