@@ -1,5 +1,7 @@
 const sprites = new Image()
 sprites.src = '../assets/img/sprites.png'
+const hitSound = new Audio()
+hitSound.src = '../assets/sounds/hit.wav'
 
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
@@ -49,30 +51,41 @@ function collision(flappyBird, ground) {
 
 // ------------ ground ------------
 
-const ground = {
-    spriteX: 0,
-    spriteY: 610,
-    width: 224,
-    height: 112,
-    positionX: 0,
-    positionY: canvas.height - 112,
-    draw() {
-        context.drawImage(
-            sprites,
-            ground.spriteX, ground.spriteY,
-            ground.width, ground.height,
-            ground.positionX, ground.positionY,
-            ground.width, ground.height
-        )
+function createGround() {
+    const ground = {
+        spriteX: 0,
+        spriteY: 610,
+        width: 224,
+        height: 112,
+        positionX: 0,
+        positionY: canvas.height - 112,
+        refresh() {
+            const groundMovement = 1
+            const repeatIn = ground.width / 2
+            const movement = ground.positionX - groundMovement
 
-        context.drawImage(
-            sprites,
-            ground.spriteX, ground.spriteY,
-            ground.width, ground.height,
-            (ground.positionX + ground.width), ground.positionY,
-            ground.width, ground.height
-        )
+            ground.positionX = movement % repeatIn
+        },
+        draw() {
+            context.drawImage(
+                sprites,
+                ground.spriteX, ground.spriteY,
+                ground.width, ground.height,
+                ground.positionX, ground.positionY,
+                ground.width, ground.height
+            )
+    
+            context.drawImage(
+                sprites,
+                ground.spriteX, ground.spriteY,
+                ground.width, ground.height,
+                (ground.positionX + ground.width), ground.positionY,
+                ground.width, ground.height
+            )
+        }
     }
+
+    return ground
 }
 
 // ------------ start screen ------------
@@ -112,12 +125,15 @@ function createFlappyBird() {
         jump() {
             flappyBird.speed = - flappyBird.jumpHeight
         },
-    
+        
         refresh() {
-            if(collision(flappyBird, ground)) {
+            if(collision(flappyBird, globals.ground)) {
                 console.log('collided')
-    
-                changeScreen(screens.start)
+                hitSound.play()
+
+                setTimeout(() => {
+                    changeScreen(screens.start)
+                }, 500);
                 return
             }
             flappyBird.speed = flappyBird.speed + flappyBird.gravity
@@ -156,10 +172,11 @@ const screens = {
     start: {
         initialize() {
             globals.flappyBird = createFlappyBird()
+            globals.ground = createGround()
         },
         draw() {
             background.draw()
-            ground.draw()
+            globals.ground.draw()
             globals.flappyBird.draw()
             msgReady.draw()
 
@@ -168,7 +185,7 @@ const screens = {
             changeScreen(screens.game)
         },
         refresh() {
-
+            globals.ground.refresh()
         }
     }
 }
@@ -176,7 +193,7 @@ const screens = {
 screens.game = {
     draw() {
         background.draw()
-        ground.draw()
+        globals.ground.draw()
         globals.flappyBird.draw()
     },
     click() {
