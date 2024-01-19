@@ -109,6 +109,49 @@ const msgReady = {
     }
 }
 
+// ------------ pipes ------------
+
+function createPipes() {
+    const pipes = {
+        width: 52,
+        height: 400,
+        ground: {
+            spriteX: 0,
+            spriteY: 169
+        },
+        sky: {
+            spriteX: 52,
+            spriteY: 169,
+        },
+        space: 80,
+        draw() {
+            const spaceBetweenPipes = 40
+
+            const skyPipeX = 220
+            const skyPipeY = 0
+
+            context.drawImage(
+                sprites,
+                pipes.sky.spriteX, pipes.sky.spriteY,
+                pipes.width, pipes.height,
+                skyPipeX, skyPipeY,
+                pipes.width, pipes.height
+            )
+
+            const groundPipeX = 220
+            const groundPipeY = pipes.height + spaceBetweenPipes
+            context.drawImage(
+                sprites,
+                pipes.ground.spriteX, pipes.ground.spriteY,
+                pipes.width, pipes.height,
+                groundPipeX, groundPipeY,
+                pipes.width, pipes.height
+            )
+        }
+    }
+
+    return pipes
+}
 // ------------ the bird ------------
 
 function createFlappyBird() {
@@ -194,12 +237,14 @@ const screens = {
         initialize() {
             globals.flappyBird = createFlappyBird()
             globals.ground = createGround()
+            globals.pipes = createPipes()
         },
         draw() {
             background.draw()
             globals.ground.draw()
             globals.flappyBird.draw()
-            msgReady.draw()
+            globals.pipes.draw()
+            // msgReady.draw()
 
         },
         click() {
@@ -222,7 +267,7 @@ screens.game = {
     },
     refresh() {
         globals.flappyBird.refresh()
-
+        globals.ground.refresh()
     }
 }
 
