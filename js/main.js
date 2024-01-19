@@ -125,28 +125,55 @@ function createPipes() {
         },
         space: 80,
         draw() {
-            const spaceBetweenPipes = 40
+            pipes.even.forEach(function(even) {
 
-            const skyPipeX = 220
-            const skyPipeY = 0
+            const randomY = even.y
+            const spaceBetweenPipes = 90
 
+            const skyPipeX = even.x
+            const skyPipeY = randomY
+
+
+            
+            // sky pipes
             context.drawImage(
                 sprites,
                 pipes.sky.spriteX, pipes.sky.spriteY,
                 pipes.width, pipes.height,
                 skyPipeX, skyPipeY,
                 pipes.width, pipes.height
-            )
+                )
+            
+                //ground pipes
+                const groundPipeX = even.x
+                const groundPipeY = pipes.height + spaceBetweenPipes + randomY
 
-            const groundPipeX = 220
-            const groundPipeY = pipes.height + spaceBetweenPipes
             context.drawImage(
                 sprites,
                 pipes.ground.spriteX, pipes.ground.spriteY,
                 pipes.width, pipes.height,
                 groundPipeX, groundPipeY,
                 pipes.width, pipes.height
-            )
+                )
+            })
+        },
+        even: [],
+        refresh() {
+            const  after100Frames = frames % 100 === 0
+            if(after100Frames) {
+                pipes.even.push({
+                    x: canvas.width,
+                    y: -150 * (Math.random() + 1)
+                })
+            }
+
+            pipes.even.forEach(function(even) {
+                even.x = even.x - 2
+
+                if(even.x + pipes.width <= 0) {
+                    pipes.even.shift()
+                }
+            })
         }
     }
 
@@ -241,10 +268,9 @@ const screens = {
         },
         draw() {
             background.draw()
-            globals.ground.draw()
             globals.flappyBird.draw()
-            globals.pipes.draw()
-            // msgReady.draw()
+            globals.ground.draw()
+            msgReady.draw()
 
         },
         click() {
@@ -259,6 +285,7 @@ const screens = {
 screens.game = {
     draw() {
         background.draw()
+        globals.pipes.draw()
         globals.ground.draw()
         globals.flappyBird.draw()
     },
@@ -268,6 +295,8 @@ screens.game = {
     refresh() {
         globals.flappyBird.refresh()
         globals.ground.refresh()
+        globals.pipes.refresh()
+
     }
 }
 
