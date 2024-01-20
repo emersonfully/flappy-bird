@@ -125,53 +125,85 @@ function createPipes() {
         },
         space: 80,
         draw() {
-            pipes.even.forEach(function(even) {
+            pipes.pares.forEach(function(par) {
 
-            const randomY = even.y
-            const spaceBetweenPipes = 90
+                const randomY = par.y
+                const spaceBetweenPipes = 90
 
-            const skyPipeX = even.x
-            const skyPipeY = randomY
+                const skyPipeX = par.x
+                const skyPipeY = randomY
 
 
             
             // sky pipes
-            context.drawImage(
-                sprites,
-                pipes.sky.spriteX, pipes.sky.spriteY,
-                pipes.width, pipes.height,
-                skyPipeX, skyPipeY,
-                pipes.width, pipes.height
+                context.drawImage(
+                    sprites,
+                    pipes.sky.spriteX, pipes.sky.spriteY,
+                    pipes.width, pipes.height,
+                    skyPipeX, skyPipeY,
+                    pipes.width, pipes.height
                 )
             
                 //ground pipes
-                const groundPipeX = even.x
+                const groundPipeX = par.x
                 const groundPipeY = pipes.height + spaceBetweenPipes + randomY
 
-            context.drawImage(
-                sprites,
-                pipes.ground.spriteX, pipes.ground.spriteY,
-                pipes.width, pipes.height,
-                groundPipeX, groundPipeY,
-                pipes.width, pipes.height
+                context.drawImage(
+                    sprites,
+                    pipes.ground.spriteX, pipes.ground.spriteY,
+                    pipes.width, pipes.height,
+                    groundPipeX, groundPipeY,
+                    pipes.width, pipes.height
                 )
+
+                par.skyPipe = {
+                    x: skyPipeX,
+                    y: pipes.height + skyPipeY
+                }
+
+                par.groundPipe ={
+                    x: groundPipeX,
+                    y: groundPipeY
+                }
             })
         },
-        even: [],
+        hasCollisionWithBird(par) {
+            const birdHead = globals.flappyBird.positionY
+            const birdFeet = globals.flappyBird.positionY + globals.flappyBird.height
+            if(globals.flappyBird.spriteX >= par.x) {
+                // console.log('Flappy bird invadiu a area')
+
+                if(birdHead <= par.skyPipe.y) {
+                    return true
+                }
+
+                if(birdFeet >= par.groundPipe.y) {
+                    return true
+                }
+            }
+
+            return false
+        },
+        pares: [],
         refresh() {
             const  after100Frames = frames % 100 === 0
             if(after100Frames) {
-                pipes.even.push({
+                console.log('passou 100 frames')
+                pipes.pares.push({
                     x: canvas.width,
                     y: -150 * (Math.random() + 1)
                 })
             }
 
-            pipes.even.forEach(function(even) {
-                even.x = even.x - 2
+            pipes.pares.forEach(function(par) {
+                par.x = par.x - 2
 
-                if(even.x + pipes.width <= 0) {
-                    pipes.even.shift()
+                if(pipes.hasCollisionWithBird(par)) {
+                    changeScreen(screens.start)
+                }
+
+                if(par.x + pipes.width <= 0) {
+                    pipes.pares.shift()
                 }
             })
         }
@@ -269,6 +301,7 @@ const screens = {
         draw() {
             background.draw()
             globals.flappyBird.draw()
+
             globals.ground.draw()
             msgReady.draw()
 
@@ -285,9 +318,9 @@ const screens = {
 screens.game = {
     draw() {
         background.draw()
+        globals.flappyBird.draw()
         globals.pipes.draw()
         globals.ground.draw()
-        globals.flappyBird.draw()
     },
     click() {
         globals.flappyBird.jump()
