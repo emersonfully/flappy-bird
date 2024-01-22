@@ -2,6 +2,10 @@ const sprites = new Image()
 sprites.src = '../assets/img/sprites.png'
 const hitSound = new Audio()
 hitSound.src = '../assets/sounds/hit.wav'
+const jumpSound = new Audio()
+jumpSound.src = '../assets/sounds/jump.wav'
+const pointSound = new Audio()
+pointSound.src = '../assets/sounds/point.wav'
 
 let frames = 0
 const canvas = document.querySelector('canvas')
@@ -192,12 +196,15 @@ function createPipes() {
             const birdFeet = globals.flappyBird.positionY + globals.flappyBird.height
             if((globals.flappyBird.spriteX + globals.flappyBird.width) >= par.x) {
                 // console.log('Flappy bird invadiu a area')
+                pointSound.play()
 
                 if(birdHead <= par.skyPipe.y) {
+                    hitSound.play()
                     return true
                 }
 
                 if(birdFeet >= par.groundPipe.y) {
+                    hitSound.play()
                     return true
                 }
             }
@@ -247,6 +254,7 @@ function createFlappyBird() {
         jumpHeight: 4.6,
         jump() {
             flappyBird.speed = - flappyBird.jumpHeight
+            jumpSound.play()
         },
         moves: [
             {spriteX: 0, spriteY: 0,},
