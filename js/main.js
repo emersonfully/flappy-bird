@@ -190,7 +190,7 @@ function createPipes() {
         hasCollisionWithBird(par) {
             const birdHead = globals.flappyBird.positionY
             const birdFeet = globals.flappyBird.positionY + globals.flappyBird.height
-            if(globals.flappyBird.spriteX >= par.x) {
+            if((globals.flappyBird.spriteX + globals.flappyBird.width) >= par.x) {
                 // console.log('Flappy bird invadiu a area')
 
                 if(birdHead <= par.skyPipe.y) {
