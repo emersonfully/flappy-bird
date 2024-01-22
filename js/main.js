@@ -109,6 +109,26 @@ const msgReady = {
     }
 }
 
+// ------------ start screen ------------
+
+const msgGameOver = {
+    spriteX: 134,
+    spriteY: 153,
+    width: 226,
+    height: 200,
+    positionX: (canvas.width / 2) - 226 / 2,
+    positionY: 50,
+    draw() {
+        context.drawImage(
+            sprites,
+            msgGameOver.spriteX, msgGameOver.spriteY,
+            msgGameOver.width, msgGameOver.height,
+            msgGameOver.positionX, msgGameOver.positionY,
+            msgGameOver.width, msgGameOver.height
+        )
+    }
+}
+
 // ------------ pipes ------------
 
 function createPipes() {
@@ -199,7 +219,7 @@ function createPipes() {
                 par.x = par.x - 2
 
                 if(pipes.hasCollisionWithBird(par)) {
-                    changeScreen(screens.start)
+                    changeScreen(screens.gameOver)
                 }
 
                 if(par.x + pipes.width <= 0) {
@@ -252,9 +272,7 @@ function createFlappyBird() {
                 console.log('collided')
                 hitSound.play()
 
-                setTimeout(() => {
-                    changeScreen(screens.start)
-                }, 500);
+                changeScreen(screens.gameOver)
                 return
             }
             flappyBird.speed = flappyBird.speed + flappyBird.gravity
@@ -357,6 +375,18 @@ screens.game = {
         globals.ground.refresh()
         globals.pipes.refresh()
         globals.score.refresh()
+    }
+}
+
+screens.gameOver = {
+    draw() {
+        msgGameOver.draw()
+    },
+    refresh() {
+
+    },
+    click() {
+        changeScreen(screens.start)
     }
 }
 
