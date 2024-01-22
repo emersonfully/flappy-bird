@@ -277,6 +277,29 @@ function createFlappyBird() {
     return flappyBird
 }
 
+function createScore() {
+    const score = {
+        points: 0,
+        refresh() {
+            const frameInterval = 100
+            const beyondInterval = frames % frameInterval === 0
+
+            if(beyondInterval) {
+                score.points = score.points + 1
+
+            }
+        },
+        draw() {
+            context.font = '35px VT323'
+            context.textAlign = 'right'
+            context.fillStyle = 'white'
+            context.fillText(`${score.points}`, canvas.width - 10, 35)
+        }
+    }
+
+    return score
+}
+
 
 // ------------ screens ------------
 
@@ -316,11 +339,15 @@ const screens = {
 }
 
 screens.game = {
+    initialize() {
+        globals.score = createScore()
+    },
     draw() {
         background.draw()
         globals.flappyBird.draw()
         globals.pipes.draw()
         globals.ground.draw()
+        globals.score.draw()
     },
     click() {
         globals.flappyBird.jump()
@@ -329,7 +356,7 @@ screens.game = {
         globals.flappyBird.refresh()
         globals.ground.refresh()
         globals.pipes.refresh()
-
+        globals.score.refresh()
     }
 }
 
