@@ -1,11 +1,11 @@
 const sprites = new Image()
-sprites.src = '../assets/img/sprites.png'
+sprites.src = 'assets/img/sprites.png'
 const hitSound = new Audio()
-hitSound.src = '../assets/sounds/hit.wav'
+hitSound.src = 'assets/sounds/hit.wav'
 const jumpSound = new Audio()
-jumpSound.src = '../assets/sounds/jump.wav'
+jumpSound.src = 'assets/sounds/jump.wav'
 const pointSound = new Audio()
-pointSound.src = '../assets/sounds/point.wav'
+pointSound.src = 'assets/sounds/point.wav'
 
 let frames = 0
 const canvas = document.querySelector('canvas')
