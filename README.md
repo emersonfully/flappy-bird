@@ -2,6 +2,10 @@
 
 Bem-vindo ao meu jogo inspirado no clássico Flappy Bird! Este jogo foi desenvolvido utilizando JavaScript Vanilla e o elemento Canvas para criar uma experiência divertida e desafiadora. Aqui está um guia rápido para você começar:
 
+## Live Demo
+
+- https://emersonfully.github.io/flappy-bird/
+
 ## Como Jogar
 
 1. #### Acesso ao Jogo:
