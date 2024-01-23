@@ -1,5 +1,5 @@
 const sprites = new Image()
-sprites.src = '../assets/img/sprites.png'
+sprites.src = 'assets/img/sprites.png'
 // const hitSound = new Audio()
 // hitSound.src = '../assets/sounds/hit.wav'
 // const jumpSound = new Audio()
