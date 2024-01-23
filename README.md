@@ -9,7 +9,7 @@ Bem-vindo ao meu jogo inspirado no clássico Flappy Bird! Este jogo foi desenvol
 - Clone este repositório para o seu computador.
 
 ```bash
-git clone https://seu-repositorio/flappy-bird-clone.git
+git clone https://github.com/emersonfully/flappy-bird.git
 ```
 
 2. #### Abra o Jogo:
