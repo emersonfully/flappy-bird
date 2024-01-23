@@ -11,6 +11,8 @@ let frames = 0
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
 
+const isImageLoaded = () => sprites.complete && sprites.naturalWidth !== 0
+
 // ------------ background ------------
 
 const background = {
@@ -24,20 +26,24 @@ const background = {
         context.fillStyle = '#70c5ce'
         context.fillRect(0,0, canvas.width, canvas.height)
 
-        context.drawImage(
-            sprites,
-            background.spriteX, background.spriteY,
-            background.width, background.height,
-            background.positionX, background.positionY,
-            background.width, background.height
-        ) 
-        context.drawImage(
-            sprites,
-            background.spriteX, background.spriteY,
-            background.width, background.height,
-            (background.positionX + background.width), background.positionY,
-            background.width, background.height
-        ) 
+
+        if( isImageLoaded()) {
+
+            context.drawImage(
+                sprites,
+                background.spriteX, background.spriteY,
+                background.width, background.height,
+                background.positionX, background.positionY,
+                background.width, background.height
+            ) 
+            context.drawImage(
+                sprites,
+                background.spriteX, background.spriteY,
+                background.width, background.height,
+                (background.positionX + background.width), background.positionY,
+                background.width, background.height
+            ) 
+        }
     }
 }
 
@@ -71,22 +77,27 @@ function createGround() {
 
             ground.positionX = movement % repeatIn
         },
+        
         draw() {
-            context.drawImage(
-                sprites,
-                ground.spriteX, ground.spriteY,
-                ground.width, ground.height,
-                ground.positionX, ground.positionY,
-                ground.width, ground.height
-            )
-    
-            context.drawImage(
-                sprites,
-                ground.spriteX, ground.spriteY,
-                ground.width, ground.height,
-                (ground.positionX + ground.width), ground.positionY,
-                ground.width, ground.height
-            )
+            if(isImageLoaded()) {
+
+                context.drawImage(
+                    sprites,
+                    ground.spriteX, ground.spriteY,
+                    ground.width, ground.height,
+                    ground.positionX, ground.positionY,
+                    ground.width, ground.height
+                )
+        
+                context.drawImage(
+                    sprites,
+                    ground.spriteX, ground.spriteY,
+                    ground.width, ground.height,
+                    (ground.positionX + ground.width), ground.positionY,
+                    ground.width, ground.height
+                )
+            }
+
         }
     }
 
@@ -103,13 +114,16 @@ const msgReady = {
     positionX: (canvas.width / 2) - 174 / 2,
     positionY: 50,
     draw() {
-        context.drawImage(
-            sprites,
-            msgReady.spriteX, msgReady.spriteY,
-            msgReady.width, msgReady.height,
-            msgReady.positionX, msgReady.positionY,
-            msgReady.width, msgReady.height
-        )
+        if(isImageLoaded()) {
+
+            context.drawImage(
+                sprites,
+                msgReady.spriteX, msgReady.spriteY,
+                msgReady.width, msgReady.height,
+                msgReady.positionX, msgReady.positionY,
+                msgReady.width, msgReady.height
+            )
+        }
     }
 }
 
@@ -123,13 +137,16 @@ const msgGameOver = {
     positionX: (canvas.width / 2) - 226 / 2,
     positionY: 50,
     draw() {
-        context.drawImage(
-            sprites,
-            msgGameOver.spriteX, msgGameOver.spriteY,
-            msgGameOver.width, msgGameOver.height,
-            msgGameOver.positionX, msgGameOver.positionY,
-            msgGameOver.width, msgGameOver.height
-        )
+        if(isImageLoaded()) {
+
+            context.drawImage(
+                sprites,
+                msgGameOver.spriteX, msgGameOver.spriteY,
+                msgGameOver.width, msgGameOver.height,
+                msgGameOver.positionX, msgGameOver.positionY,
+                msgGameOver.width, msgGameOver.height
+            )
+        }
     }
 }
 
@@ -149,47 +166,51 @@ function createPipes() {
         },
         space: 80,
         draw() {
-            pipes.pares.forEach(function(par) {
 
-                const randomY = par.y
-                const spaceBetweenPipes = 90
+            if(isImageLoaded()) {
 
-                const skyPipeX = par.x
-                const skyPipeY = randomY
+                pipes.pares.forEach(function(par) {
+
+                    const randomY = par.y
+                    const spaceBetweenPipes = 90
+
+                    const skyPipeX = par.x
+                    const skyPipeY = randomY
 
 
-            
-            // sky pipes
-                context.drawImage(
-                    sprites,
-                    pipes.sky.spriteX, pipes.sky.spriteY,
-                    pipes.width, pipes.height,
-                    skyPipeX, skyPipeY,
-                    pipes.width, pipes.height
-                )
-            
-                //ground pipes
-                const groundPipeX = par.x
-                const groundPipeY = pipes.height + spaceBetweenPipes + randomY
+                
+                // sky pipes
+                    context.drawImage(
+                        sprites,
+                        pipes.sky.spriteX, pipes.sky.spriteY,
+                        pipes.width, pipes.height,
+                        skyPipeX, skyPipeY,
+                        pipes.width, pipes.height
+                    )
+                
+                    //ground pipes
+                    const groundPipeX = par.x
+                    const groundPipeY = pipes.height + spaceBetweenPipes + randomY
 
-                context.drawImage(
-                    sprites,
-                    pipes.ground.spriteX, pipes.ground.spriteY,
-                    pipes.width, pipes.height,
-                    groundPipeX, groundPipeY,
-                    pipes.width, pipes.height
-                )
+                    context.drawImage(
+                        sprites,
+                        pipes.ground.spriteX, pipes.ground.spriteY,
+                        pipes.width, pipes.height,
+                        groundPipeX, groundPipeY,
+                        pipes.width, pipes.height
+                    )
 
-                par.skyPipe = {
-                    x: skyPipeX,
-                    y: pipes.height + skyPipeY
-                }
+                    par.skyPipe = {
+                        x: skyPipeX,
+                        y: pipes.height + skyPipeY
+                    }
 
-                par.groundPipe ={
-                    x: groundPipeX,
-                    y: groundPipeY
-                }
-            })
+                    par.groundPipe ={
+                        x: groundPipeX,
+                        y: groundPipeY
+                    }
+                })
+            }
         },
         hasCollisionWithBird(par) {
             const birdHead = globals.flappyBird.positionY
@@ -287,15 +308,18 @@ function createFlappyBird() {
             flappyBird.positionY = flappyBird.positionY + flappyBird.speed
         },
         draw() {
-            flappyBird.actualFrameRefresh()
-            const {spriteX, spriteY} = flappyBird.moves[flappyBird.actualFrame]
-            context.drawImage(
-                sprites, // the sprite image
-                spriteX, spriteY, // Sprite x, Sprite y
-                flappyBird.width, flappyBird.height, // sprite size
-                flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
-                flappyBird.width, flappyBird.height // sprite size inside canvas
-            )
+            if(isImageLoaded()) {
+                flappyBird.actualFrameRefresh()
+                const {spriteX, spriteY} = flappyBird.moves[flappyBird.actualFrame]
+                context.drawImage(
+                    sprites, // the sprite image
+                    spriteX, spriteY, // Sprite x, Sprite y
+                    flappyBird.width, flappyBird.height, // sprite size
+                    flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
+                    flappyBird.width, flappyBird.height // sprite size inside canvas
+                )
+
+            }
     
         }
     }
@@ -316,10 +340,13 @@ function createScore() {
             }
         },
         draw() {
-            context.font = '35px VT323'
-            context.textAlign = 'right'
-            context.fillStyle = 'white'
-            context.fillText(`${score.points}`, canvas.width - 10, 35)
+            if(isImageLoaded()) {
+
+                context.font = '35px VT323'
+                context.textAlign = 'right'
+                context.fillStyle = 'white'
+                context.fillText(`${score.points}`, canvas.width - 10, 35)
+            }
         }
     }
 
@@ -349,10 +376,13 @@ const screens = {
         },
         draw() {
             background.draw()
-            globals.flappyBird.draw()
+            if(isImageLoaded()) {
 
-            globals.ground.draw()
-            msgReady.draw()
+                globals.flappyBird.draw()
+                
+                globals.ground.draw()
+                msgReady.draw()
+            }
 
         },
         click() {
@@ -369,11 +399,14 @@ screens.game = {
         globals.score = createScore()
     },
     draw() {
-        background.draw()
-        globals.flappyBird.draw()
-        globals.pipes.draw()
-        globals.ground.draw()
-        globals.score.draw()
+        if(isImageLoaded()) {
+            
+            background.draw()
+            globals.flappyBird.draw()
+            globals.pipes.draw()
+            globals.ground.draw()
+            globals.score.draw()
+        }
     },
     click() {
         globals.flappyBird.jump()
@@ -388,7 +421,10 @@ screens.game = {
 
 screens.gameOver = {
     draw() {
-        msgGameOver.draw()
+        if(isImageLoaded()) {
+
+            msgGameOver.draw()
+        }
     },
     refresh() {
 
