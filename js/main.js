@@ -113,7 +113,7 @@ const msgReady = {
     }
 }
 
-// ------------ start screen ------------
+// ------------ game over screen ------------
 
 const msgGameOver = {
     spriteX: 134,
@@ -290,7 +290,7 @@ function createFlappyBird() {
             flappyBird.actualFrameRefresh()
             const {spriteX, spriteY} = flappyBird.moves[flappyBird.actualFrame]
             context.drawImage(
-                sprites, // the psrite image
+                sprites, // the sprite image
                 spriteX, spriteY, // Sprite x, Sprite y
                 flappyBird.width, flappyBird.height, // sprite size
                 flappyBird.positionX, flappyBird.positionY, // draw location inside canvas
