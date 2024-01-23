@@ -18,7 +18,7 @@ git clone https://github.com/emersonfully/flappy-bird.git
 
 3. #### Controles:
 
-Pressione a barra de espaço para fazer o pássaro pular e evite os canos.
+Clique com o botão direito do mouse para fazer o pássaro pular e evite os canos.
     
 ## Funcionalidades
 
